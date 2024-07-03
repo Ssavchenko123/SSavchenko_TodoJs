@@ -10,16 +10,20 @@
 <div class="center">
     <input class="input" type="text" placeholder="What needs to be done today?" id="input" name="input1" required minlength="1" maxlength="256" size="24" />
 <div>
-    <button class="AddButton" id="button">ADD</button>
+    <button class="add-button" id="button">ADD</button>
 </div>
 </div>
 </form>
 <div class="block" id="block">
-<input class="checkboxup" type="checkbox"/>
-<b class="checkboxtext">Assept All</b>
+<input class="check-box-up" type="checkbox"/>
+<b class="check-box-text">Accept All</b>
 <li id="emptyList">
-    <img src="./1.png" alt="Empty" width="48" height="54" class="emptyimage">
-    <div class="Emptytext">Список дел пуст</div>
+    <img src="./1.png" alt="Empty" width="48" height="54" class="empty-image">
+    <div class="empty-text">Nothing here</div>
+</li>
+<li id="ToDo-elements">
+    <input class="check-box" type="checkbox" >
+<div class="class-block" id="element"></div>
 </li>
 </div>
 <script defer src="todo.js"></script>

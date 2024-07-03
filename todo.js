@@ -1,21 +1,23 @@
 
 const form = document.querySelector('#form');
-const input = document.querySelector('#input');
-let a7 = []
+const inputMain = document.querySelector('#input');
+const buttonAdd = document.querySelector('#button')
 
-form.addEventListener('submit', function(event) {
-event.preventDefault();
-const taskText = input.value
-console.log(taskText);
-})
-function inputarr(){
-  let input = document.querySelector('#input')
 
-  a7.push(input.value)
-  console.log(a7)
+const taskArray = []
 
+function addTask(event){
+  event.preventDefault();
+  taskArray.push(
+    {
+      id: Date.now(),
+      taskText: inputMain.value,
+      isComplited: false
+    }
+  )
+  console.log(taskArray)
 }
 
-document.querySelector('#input').onclick = inputarr
 
 
+buttonAdd.addEventListener("click", addTask)
