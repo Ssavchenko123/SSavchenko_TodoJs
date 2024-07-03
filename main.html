@@ -2,15 +2,26 @@
 <html>
 <head>
     <link rel="stylesheet" href="styles.css">
-        <tItle>ToDo</tItle>
+        <tItle>ToDo JS</tItle>
 </head>
 <body >
-<h1>ToDo List</h1>
+<h1>ToDo List JS</h1>
+<form id = 'form'>
 <div class="center">
-    <input class="input" type="text" id="name" name="name" required minlength="1" maxlength="256" size="24" />
+    <input class="input" type="text" placeholder="What needs to be done today?" id="input" name="input1" required minlength="1" maxlength="256" size="24" />
+<div>
+    <button class="AddButton" id="button">ADD</button>
 </div>
-<div class="block">
-
 </div>
-</body>
+</form>
+<div class="block" id="block">
+<input class="checkboxup" type="checkbox"/>
+<b class="checkboxtext">Assept All</b>
+<li id="emptyList">
+    <img src="./1.png" alt="Empty" width="48" height="54" class="emptyimage">
+    <div class="Emptytext">Список дел пуст</div>
+</li>
+</div>
+<script defer src="todo.js"></script>
+</body> 
 </html>
