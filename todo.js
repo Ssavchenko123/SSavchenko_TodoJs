@@ -17,6 +17,11 @@ function addTask(event){
   )
   console.log(taskArray)
 }
+function render() {
+  taskArray.forEach(function(id){
+    console.log(id);
+  });
+}
 
 
 
