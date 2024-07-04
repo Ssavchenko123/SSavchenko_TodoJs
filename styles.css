@@ -101,6 +101,6 @@ font-family: serif;
 .delete{
   width: 20px;
   height: 20px;
-  text-align: right;
+  margin-left: 70%;
   background-color: azure;
 }

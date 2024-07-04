@@ -1,37 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <link rel="stylesheet" href="styles.css">
-        <tItle>ToDo JS</tItle>
+  <link rel="stylesheet" href="styles.css">
+  <tItle>ToDo JS</tItle>
 </head>
-<body >
-<h1>ToDo List JS</h1>
-<form id = 'form'>
-<div class="center">
-    <input class="input" type="text" placeholder="What needs to be done today?" id="input" name="input1" required minlength="1" maxlength="256" size="24" />
-<div>
-    <button class="add-button" id="button">ADD</button>
-</div>
-</div>
-</form>
-<div class="block" id="block">
- <input class="check-box-up" type="checkbox"/>
-  <b class="check-box-text">Accept All</b>
-   <!--<li id="emptyList">
+
+<body>
+  <h1>ToDo List JS</h1>
+  <form id='form'>
+    <div class="center">
+      <input class="input" type="text" placeholder="What needs to be done today?" id="input" name="input1" required
+        minlength="1" maxlength="256" size="24" />
+      <div>
+        <button class="add-button" id="button">ADD</button>
+      </div>
+    </div>
+  </form>
+  <div class="block" id="block">
+    <input class="check-box-up" type="checkbox" />
+    <b class="check-box-text">Accept All</b>
+    <ul>
+      <!--<li id="emptyList">
      <img src="./1.png" alt="Empty" width="48" height="54" class="empty-image">
      <div class="empty-text">Nothing here</div>
    </li>-->
-   <li id="ToDo-elements">
-    <div class="task-block" id="element">
-<input class="check-box" type="checkbox" >
-<pre class="task-name">{12424}</pre>
-    <div class="delete"></div>
-</div>
-<div class="task-block" id="element">
-  <input class="check-box" type="checkbox" >
+      <li id="ToDo-elements">
+        <div class="task-block" id="element">
+          <input class="check-box" type="checkbox">
+          <pre class="task-name">{12424}</pre>
+          <div class="delete"></div>
+        </div>
+        <div class="task-block" id="element">
+          <input class="check-box" type="checkbox">
+        </div>
+      </li>
+    </ul>
   </div>
-</li>
-</div>
-<script defer src="todo.js"></script>
-</body> 
+  <script defer src="todo.js"></script>
+</body>
+
 </html>
