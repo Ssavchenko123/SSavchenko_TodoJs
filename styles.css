@@ -60,6 +60,7 @@ p{
     display: flex;
     margin-top: -3%;
     margin-left: 44%;
+    margin-bottom: 30px;
 font-size: large;
 font-family: serif;
 }
@@ -75,20 +76,31 @@ font-family: serif;
     font-size: 35px;
     font-family: serif;
 }
-.check-box{
-    display: flex;
-    margin-top: 2%;
-    margin-left: 7%;
-    width: 15px;
-    height: 15px;
+.task-block{
+  margin: 0 auto;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+ align-items: center;
+ width: 500px;
+ height: 30px;
+ display: flex;
+ flex-direction: row;
+ overflow: hidden;
+ background-color:antiquewhite ;
 }
-.class-block{
-    width: 200px;
-    height: 30px;
-    position: absolute;
-    margin-top: 2%;
-    margin-left: 5%;
-    background-color: #46b4a7;
-    margin: -125px 0 0 -125px;
-    
+.check-box{
+  display: flex;
+  width: 20px;
+  height: 20px;
+}
+.task-name{
+  margin-left: 5px;
+  font-style: italic;
+  font-size: large;
+}
+.delete{
+  width: 20px;
+  height: 20px;
+  text-align: right;
+  background-color: azure;
 }
