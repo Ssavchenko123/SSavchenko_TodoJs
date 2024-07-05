@@ -2,8 +2,7 @@
 const form = document.querySelector('#form');
 const inputMain = document.querySelector('#input');
 const buttonAdd = document.querySelector('#button');
-
-
+const list = document.querySelector('#todo-elements')
 const taskArray = []
 
 function addTask(event) {
@@ -15,30 +14,33 @@ function addTask(event) {
       isComplited: false
     }
   )
+  inputMain.value = ""; 
   render()
 }
+
 function render() {
   let renderElements = ""
   taskArray.forEach((task) => {
     console.log(task);
     renderElements += `
-    <li class="task-block" id="ToDoElements">
+    <li class="task-block" id="${task.id}">
       <input class="check-box" type="checkbox">
       <pre class="task-name">${task.taskText}</pre>
-      <div class="delete">X</div>
+      <button class="delete" id>X</button>
     </li>
     `
+    list.innerHTML = renderElements ;
     console.log(renderElements)
   });
 }
 
-/*let inputTask= document.createElement('ToDoElement')
-inputTask.innerHTML = `
-<li class="task-block">
-  <input class="check-box" type="checkbox">
-  <pre class="task-name">${render}</pre>
-  <div class="delete">X</div>
-</li>`;
-li.append(inputTask);*/
+document.querySelector('ul').addEventListener('click', function(event) {
+  if (event.target.tagName === 'BUTTON') { 
+    let target = event.target;
+    let parent = target.parentElement;
+    console.log(parent.id)
+  }
+});
+
 
 buttonAdd.addEventListener("click", addTask)
