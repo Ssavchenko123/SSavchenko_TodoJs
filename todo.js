@@ -3,7 +3,7 @@ const form = document.querySelector('#form');
 const inputMain = document.querySelector('#input');
 const buttonAdd = document.querySelector('#button');
 const list = document.querySelector('#todo-elements')
-const taskArray = []
+let taskArray = []
 
 function addTask(event) {
   event.preventDefault();
@@ -18,7 +18,7 @@ function addTask(event) {
   render()
 }
 
-function render() {
+const render = () =>{
   let renderElements = ""
   taskArray.forEach((task) => {
     renderElements += `
@@ -28,22 +28,25 @@ function render() {
       <button class="delete" id>X</button>
     </li>
     `
-    list.innerHTML = renderElements ;
   });
+  list.innerHTML = renderElements ;
 }
 
-document.querySelector('ul').addEventListener('click', function (event) {
-  if (event.target.tagName === 'BUTTON') {
-    let target = event.target;
-    let parent = target.parentElement;
-    taskArray.filter(function callbackFn(element) {
-      element.id != parent.id
-      render()
-    });
-    
-  
+function handleClick(event) {
+  const parentId = event.target.parentElement.id;
+  if (event.target.className === 'delete') {
+    taskArray = taskArray.filter(task => (task.id != parentId))
+    render()
   }
-});
+  if (event.target.className === 'check-box'){
+  taskArray.forEach((task) => {
+    if(task.id == parentId)task.isComplited = event.target.checked;
+  //  const checked = event.target.parentElement.isComplited;
+  //  taskArray = task.isComplited === false ?  
+  });
+  }
+  console.log(taskArray);
+}
 
-
+list.addEventListener('click', handleClick);
 buttonAdd.addEventListener("click", addTask)
