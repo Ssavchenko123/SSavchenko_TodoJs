@@ -21,7 +21,6 @@ function addTask(event) {
 function render() {
   let renderElements = ""
   taskArray.forEach((task) => {
-    console.log(task);
     renderElements += `
     <li class="task-block" id="${task.id}">
       <input class="check-box" type="checkbox">
@@ -30,15 +29,19 @@ function render() {
     </li>
     `
     list.innerHTML = renderElements ;
-    console.log(renderElements)
   });
 }
 
-document.querySelector('ul').addEventListener('click', function(event) {
-  if (event.target.tagName === 'BUTTON') { 
+document.querySelector('ul').addEventListener('click', function (event) {
+  if (event.target.tagName === 'BUTTON') {
     let target = event.target;
     let parent = target.parentElement;
-    console.log(parent.id)
+    taskArray.filter(function callbackFn(element) {
+      element.id != parent.id
+      render()
+    });
+    
+  
   }
 });
 
