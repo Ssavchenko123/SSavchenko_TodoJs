@@ -111,6 +111,9 @@ p {}
   width: 90%;
   font-style: italic;
   font-size: large;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .delete {
@@ -121,4 +124,13 @@ p {}
 }
 .hidden{
   visibility: visible;
+}
+.newText{
+  margin-left: 5px;
+  width: 90%;
+  font-style: italic;
+  font-size: large;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
