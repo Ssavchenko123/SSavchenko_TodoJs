@@ -14,11 +14,11 @@ function addTask(event) {
       isComplited: false
     }
   )
-  inputMain.value = ""; 
+  inputMain.value = "";
   render()
 }
 
-const render = () =>{
+const render = () => {
   let renderElements = ""
   taskArray.forEach((task) => {
     renderElements += `
@@ -26,10 +26,11 @@ const render = () =>{
       <input class="check-box" type="checkbox">
       <pre class="task-name">${task.taskText}</pre>
       <button class="delete" id>X</button>
+      <input type = "hidden" class = "newText">
     </li>
     `
   });
-  list.innerHTML = renderElements ;
+  list.innerHTML = renderElements;
 }
 
 function handleClick(event) {
@@ -38,14 +39,21 @@ function handleClick(event) {
     taskArray = taskArray.filter(task => (task.id != parentId))
     render()
   }
-  if (event.target.className === 'check-box'){
-  taskArray.forEach((task) => {
-    if(task.id == parentId)task.isComplited = event.target.checked;
-  //  const checked = event.target.parentElement.isComplited;
-  //  taskArray = task.isComplited === false ?  
-  });
+
+  if (event.target.className === 'check-box') {
+    taskArray.forEach((task) => {
+      if (task.id == parentId) task.isComplited = event.target.checked;
+    });
+
   }
-  console.log(taskArray);
+
+  if (event.target.className === 'task-name') {
+    if (event.detail == 2) {
+      event.target.taskText.hidden = true;
+      console.log(event)
+      //document.target.className('new-text').hidden = false;
+    };
+  }
 }
 
 list.addEventListener('click', handleClick);
