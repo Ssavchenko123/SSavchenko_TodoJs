@@ -14,7 +14,7 @@ const pages = document.querySelector('.pages')
 //const deleteAll = document.querySelector('#delete-button')
 let taskArray = []
 let filterName = "All"
-const firstPage = 1;
+let currentPage = 1;
 let totalPages = 1;
 
 function addTask(event) {
@@ -28,6 +28,13 @@ function addTask(event) {
       }
     )
   }
+  renderPages()
+  renderPage()
+  if (totalPages > currentPage) {
+    currentPage += 1
+  }
+  console.log(currentPage);
+
   inputMain.value = "";
   render()
 }
@@ -36,13 +43,10 @@ const render = () => {
   counter()
   checkAllTask.checked = taskArray.every(task => task.isCompleted) && taskArray.length;
   const rend = slicePage()
-
-  if (taskArray.length <= 0) {
-    pages.innerHTML = '';
-  }
   let renderElements = ""
-  rend.forEach((task) => {
-    renderElements += `
+  const createTask = () => {
+    rend.forEach((task) => {
+      renderElements += `
     <li class="task-block" id="${task.id}">
       <input class="check-box" type="checkbox" ${task.isCompleted ? 'checked' : ''}>
       <input hidden class = "newText" value = "${task.taskText}" >
@@ -50,11 +54,13 @@ const render = () => {
       <button class="delete">X</button>
     </li>
     `
-  });
-
+    });
+  }
+  createTask()
   list.innerHTML = renderElements;
-  renderPage()
   renderPages()
+  renderPage()
+
 
 }
 
@@ -101,6 +107,7 @@ const editTask = (event) => {
       taskArray.forEach(task => {
         if (task.id === Number(parentId)) {
           task.taskText = event.target.value
+          replaced()
         };
       });
     }
@@ -110,12 +117,14 @@ const editTask = (event) => {
     render()
   }
 }
+
 const allChecked = (event) => {
   taskArray.forEach(task => {
     task.isCompleted = event.target.checked;
   });
   render()
 }
+
 const filter = (event) => {
   if (event.target.className === 'flex-element') {
     filterName = event.target.id
@@ -144,59 +153,81 @@ const filterArray = () => {
     return taskArray.filter(task => task.isCompleted)
   }
 }
+
 const deleteCompleted = () => {
   taskArray = taskArray.filter(task => !task.isCompleted)
   render()
 }
+
 const renderPages = () => {
   const filteredArr = filterArray();
   totalPages = Math.ceil(filteredArr.length / TASK_PER_PAGE)
-  console.log(totalPages)
-
+  if (currentPage > totalPages) {
+    currentPage = totalPages
+  }
+  if (currentPage < 1) {
+    currentPage = 1;
+  }
 }
+
 const renderPage = () => {
-  let createPages = `<button class="counter">1</button>`
+  let createPages = `<button class="counter" id = "1">1</button>`
   //console.log(createPages)
   for (let i = 2; i <= totalPages; i++) {
-    createPages += `<button class="counter">${i}</button>`;
+    createPages += `<button class="counter" id ="${i}">${i}</button>`;
   }
   pages.innerHTML = createPages;
 }
+
 const replace = () => {
   return taskText.replace()
 }
 
+const changePage = (event) => {
+  if (event.target.className === 'counter') currentPage = event.target.id;
+  render()
+}
+
 const slicePage = () => {
   const filteredArray = filterArray()
-  const elementOnEnd = TASK_PER_PAGE * totalPages;
-  console.log(elementOnEnd)
-  const firstElement = elementOnEnd - TASK_PER_PAGE;
-  console.log(firstElement)
+  const firstElement = (currentPage - 1) * TASK_PER_PAGE;
+  const elementOnEnd = TASK_PER_PAGE + firstElement;
   const pagination = filteredArray.slice(firstElement, elementOnEnd)
-  console.log(pagination)
   return pagination;
 }
-// const selected = (event) =>{
-//   if (event.target.className =='flex-element') {
-//     buttons.forEach(task=>task.classList.remove('active'));
-//     event.target.classList.add("active")
-//     render()
-//   }
+// const replaced=(string)=>{
+//   return string.replace()
+//   .replace(/&/g, '&#38;')
+//   .replace(/№/g, '&#8470;')
+//   .replace(/</g, '&#60;')
+//   .replace(/>/g, '&#62;')
+//   .replace(/'*'/g, '&#8727;')
+//   .replace(/!/g, '&#33;')
+//   .replace(/?/g, '&#63;')
+//   .replace(/:/g, '&#58;')
+//   .replace(/#/g, '&#35;')
+//   .replace(/%/g, '&#37;')
+//   .replace(/$/g, '&#36;')
 // }
+// return String.replace(/[<>!?$%#*№:()]/g,(lookFor) =>{
+// switch(lookFor){
+//   case  "<": return "&#60;";
+//   case  ">": return "&#62;";
+//   case  "!": return "&#62;";
+//   case  "?": return "&#62;";
+//   case  "$": return "&#62;";
+//   case  "%": return "&#62;";
+//   case  "#": return "&#62;";
+//   case  "*": return "&#8727;";
+//   case  "№": return "&#62;";
+//   case  ":": return "&#62;";
+//   case  "(": return "&#62;";
+//   case  ")": return "&#62;";
+// }
+// })
 
-//Bottom.querySelectorAll(".bottom-buttons").forEach(task=>{
-    //   if (task.id == event.target.id) {
-    //     console.log(task)
-    //   task.classList.remove('flex-element-changed')
-    // }
-    
-    // })
-    // 
-
-
-// const a = Bottom.querySelectorAll('.flex-element')
-    // console.log(a);
-// Bottom.addEventListener("click", selected);
+// }
+pages.addEventListener("click", changePage)
 deleteAll.addEventListener("click", deleteCompleted);
 Bottom.addEventListener("click", filter);
 checkAllTask.addEventListener("click", allChecked);
