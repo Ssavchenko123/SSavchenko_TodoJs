@@ -150,10 +150,24 @@ height: 50px;
   height: 100%;
   margin-left: 1px;
 }
-.flex-element-changed{
-  width: 300px;
-  height: 100%;
-  margin-left: 1px;
+.active{
   background-color: cadetblue;
 }
-/*. */
+.counter{
+  background-color: red;
+ /*display: flex;
+  justify-content: center;
+  margin-top: 30%;
+  margin-left: 50%;*/
+}
+.delete-button{
+  display: flex;
+  justify-content: center;
+  margin-top: 40%;
+  margin-left: 47%;
+}
+
+.pages{
+  width: 300px;
+  height: 50px;
+}
