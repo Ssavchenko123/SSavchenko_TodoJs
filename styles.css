@@ -49,11 +49,12 @@ p {}
   width: 800px;
   height: 500px;
   position: absolute;
-  top: 35%;
+  top: 25%;
   left: 37%;
   background-color: #4682B4;
   margin: -125px 0 0 -125px;
   border-radius: 2%;
+  margin-top: 2%;
 }
 
 .check-box-up {
@@ -163,11 +164,27 @@ height: 50px;
 .delete-button{
   display: flex;
   justify-content: center;
-  margin-top: 40%;
-  margin-left: 47%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1%;
+  background-color: rgb(105, 150, 152);
 }
 
 .pages{
-  width: 300px;
-  height: 50px;
+  display: flex;
+  width: 800px;
+  height: 70px;
+  margin: top 10px; 
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.counter{
+  margin-left: 5px;
+  height: 30px;
+  margin-left: 5px;
+}
+.counter__active{
+  background-color: cadetblue;
 }

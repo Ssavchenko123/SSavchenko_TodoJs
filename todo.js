@@ -11,6 +11,7 @@ const Bottom = document.querySelector('#bottom-buttons')
 const buttons = Bottom.querySelectorAll('.flex-element')
 const newTask = document.querySelector('#newText')
 const pages = document.querySelector('.pages')
+const counters = pages.querySelectorAll('.counter')
 //const deleteAll = document.querySelector('#delete-button')
 let taskArray = []
 let filterName = "All"
@@ -23,7 +24,7 @@ function addTask(event) {
     taskArray.push(
       {
         id: Date.now(),
-        taskText: inputMain.value,
+        taskText: replaced(inputMain.value),
         isCompleted: false,
       }
     )
@@ -33,7 +34,6 @@ function addTask(event) {
   if (totalPages > currentPage) {
     currentPage += 1
   }
-  console.log(currentPage);
 
   inputMain.value = "";
   render()
@@ -93,7 +93,7 @@ const blurTask = (event) => {
   if (event.target.value.trim() != "" && event.target.className === 'newText') {
     taskArray.forEach(task => {
       if (task.id == event.target.parentElement.id) {
-        task.taskText = event.target.value
+        task.taskText = replaced(event.target.value)
       }
     })
   }
@@ -106,8 +106,7 @@ const editTask = (event) => {
       const parentId = event.target.parentElement.id
       taskArray.forEach(task => {
         if (task.id === Number(parentId)) {
-          task.taskText = event.target.value
-          replaced()
+          task.taskText = replaced(event.target.value)
         };
       });
     }
@@ -171,10 +170,10 @@ const renderPages = () => {
 }
 
 const renderPage = () => {
-  let createPages = `<button class="counter" id = "1">1</button>`
-  //console.log(createPages)
+  renderPages()
+    let createPages = `<button class='counter${(currentPage<2) ? ' counter__active':''}' id = "1">1</button>`
   for (let i = 2; i <= totalPages; i++) {
-    createPages += `<button class="counter" id ="${i}">${i}</button>`;
+    createPages += `<button class='counter${(currentPage === i)  ? ' counter__active' : ''}' id ="${i}">${i}</button>`;
   }
   pages.innerHTML = createPages;
 }
@@ -184,31 +183,35 @@ const replace = () => {
 }
 
 const changePage = (event) => {
-  if (event.target.className === 'counter') currentPage = event.target.id;
-  render()
+  if (event.target.className === 'counter') {
+    currentPage = Number(event.target.id);
+    render()
+     
+  }
+  
 }
-
 const slicePage = () => {
   const filteredArray = filterArray()
+  const currentPageMin = (currentPage-1) * TASK_PER_PAGE
+  if (currentPageMin>filteredArray.length && filteredArray.length) currentPage--;
   const firstElement = (currentPage - 1) * TASK_PER_PAGE;
   const elementOnEnd = TASK_PER_PAGE + firstElement;
   const pagination = filteredArray.slice(firstElement, elementOnEnd)
   return pagination;
 }
-// const replaced=(string)=>{
-//   return string.replace()
-//   .replace(/&/g, '&#38;')
-//   .replace(/№/g, '&#8470;')
-//   .replace(/</g, '&#60;')
-//   .replace(/>/g, '&#62;')
-//   .replace(/'*'/g, '&#8727;')
-//   .replace(/!/g, '&#33;')
-//   .replace(/?/g, '&#63;')
-//   .replace(/:/g, '&#58;')
-//   .replace(/#/g, '&#35;')
-//   .replace(/%/g, '&#37;')
-//   .replace(/$/g, '&#36;')
-// }
+const replaced=(string)=>{
+    return string
+    .replace(/№/g, '&#8470;')
+    .replace(/</g, '&#60;')
+    .replace(/>/g, '&#62;')
+    .replace(/!/g, '&#33;')
+    .replace(/:/g, '&#58;')
+    .replace(/#/g, '&#35;')
+    .replace(/%/g, '&#37;')
+
+}
+
+// 
 // return String.replace(/[<>!?$%#*№:()]/g,(lookFor) =>{
 // switch(lookFor){
 //   case  "<": return "&#60;";
@@ -224,9 +227,12 @@ const slicePage = () => {
 //   case  "(": return "&#62;";
 //   case  ")": return "&#62;";
 // }
-// })
-
+// })}
+// const inputReplaced =(input) =>{
+//   return replaced(input.replace(/\s+g/,''))
 // }
+
+
 pages.addEventListener("click", changePage)
 deleteAll.addEventListener("click", deleteCompleted);
 Bottom.addEventListener("click", filter);
