@@ -41,6 +41,7 @@ function addTask(event) {
 
 const render = () => {
   counter()
+  renderPage()
   checkAllTask.checked = taskArray.every(task => task.isCompleted) && taskArray.length;
   const rend = slicePage()
   let renderElements = ""
@@ -58,14 +59,13 @@ const render = () => {
   }
   createTask()
   list.innerHTML = renderElements;
-  renderPages()
-  renderPage()
-
+  
 
 }
 
 function handleClick(event) {
   const parentId = event.target.parentElement.id;
+    const filteredArray = filterArray();
   if (event.target.className === 'delete') {
     taskArray = taskArray.filter(task => (task.id != parentId))
     render()
@@ -115,6 +115,9 @@ const editTask = (event) => {
   else if (event.code === ESC) {
     render()
   }
+  else if (event.code === TAB){
+    render()
+  }
 }
 
 const allChecked = (event) => {
@@ -155,6 +158,7 @@ const filterArray = () => {
 
 const deleteCompleted = () => {
   taskArray = taskArray.filter(task => !task.isCompleted)
+  renderPages()
   render()
 }
 
@@ -163,6 +167,7 @@ const renderPages = () => {
   totalPages = Math.ceil(filteredArr.length / TASK_PER_PAGE)
   if (currentPage > totalPages) {
     currentPage = totalPages
+    render()
   }
   if (currentPage < 1) {
     currentPage = 1;
@@ -173,7 +178,9 @@ const renderPage = () => {
   renderPages()
     let createPages = `<button class='counter${(currentPage<2) ? ' counter__active':''}' id = "1">1</button>`
   for (let i = 2; i <= totalPages; i++) {
+    if(i<45){
     createPages += `<button class='counter${(currentPage === i)  ? ' counter__active' : ''}' id ="${i}">${i}</button>`;
+    }
   }
   pages.innerHTML = createPages;
 }
@@ -192,46 +199,27 @@ const changePage = (event) => {
 }
 const slicePage = () => {
   const filteredArray = filterArray()
-  const currentPageMin = (currentPage-1) * TASK_PER_PAGE
-  if (currentPageMin>filteredArray.length && filteredArray.length) currentPage--;
   const firstElement = (currentPage - 1) * TASK_PER_PAGE;
   const elementOnEnd = TASK_PER_PAGE + firstElement;
   const pagination = filteredArray.slice(firstElement, elementOnEnd)
   return pagination;
 }
-const replaced=(string)=>{
-    return string
-    .replace(/№/g, '&#8470;')
-    .replace(/</g, '&#60;')
-    .replace(/>/g, '&#62;')
-    .replace(/!/g, '&#33;')
-    .replace(/:/g, '&#58;')
-    .replace(/#/g, '&#35;')
-    .replace(/%/g, '&#37;')
-
+const replaced = (string) => {
+  return string
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
 }
 
-// 
-// return String.replace(/[<>!?$%#*№:()]/g,(lookFor) =>{
-// switch(lookFor){
-//   case  "<": return "&#60;";
-//   case  ">": return "&#62;";
-//   case  "!": return "&#62;";
-//   case  "?": return "&#62;";
-//   case  "$": return "&#62;";
-//   case  "%": return "&#62;";
-//   case  "#": return "&#62;";
-//   case  "*": return "&#8727;";
-//   case  "№": return "&#62;";
-//   case  ":": return "&#62;";
-//   case  "(": return "&#62;";
-//   case  ")": return "&#62;";
-// }
-// })}
-// const inputReplaced =(input) =>{
-//   return replaced(input.replace(/\s+g/,''))
-// }
-
+// const filteredArray = filterArray();
+//     const currentPageMin = (currentPage-1) * TASK_PER_PAGE
+//     console.log(currentPageMin);
+//     console.log(filteredArray.length)
+//     if (currentPageMin>=filteredArray.length) {
+//       currentPage--;
+//     }
 
 pages.addEventListener("click", changePage)
 deleteAll.addEventListener("click", deleteCompleted);
