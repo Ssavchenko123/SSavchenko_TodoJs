@@ -12,7 +12,6 @@ const bottomButtons = bottomMenu.querySelectorAll('.flex-element')
 const newTask = document.querySelector('#newText')
 const pages = document.querySelector('.pages')
 const counters = pages.querySelectorAll('.counter')
-//const deleteAll = document.querySelector('#delete-button')
 let tasksArray = []
 let filterName = "All"
 let currentPage = 1;
@@ -21,6 +20,9 @@ let totalPages = 1;
 function addTasks(event) {
   event.preventDefault();
   if (inputMain.value.trim() != "") {
+    filterName = "All"
+    bottomButtons.forEach(task => task.classList.remove('active'));
+    bottomMenu.children[0].classList.add("active")
     tasksArray.push(
       {
         id: Date.now(),
@@ -34,7 +36,6 @@ function addTasks(event) {
   if (totalPages > currentPage) {
     currentPage = Math.ceil(tasksArray.length / TASK_PER_PAGE)
   }
-
   inputMain.value = "";
   renderTask()
 }
@@ -50,7 +51,7 @@ const renderTask = () => {
       renderElements += `
     <li class="task-block" id="${task.id}">
       <input class="check-box" type="checkbox" ${task.isCompleted ? 'checked' : ''}>
-      <input hidden class = "newText "  minLength="1" maxLength="100" value = "${task.taskText}" >
+      <input hidden class = "newText "  minLength="1" maxLength="255" value = "${task.taskText}" >
       <pre class="task-name">${task.taskText}</pre>
       <button class="delete">X</button>
     </li>
@@ -59,13 +60,13 @@ const renderTask = () => {
   }
   createTask()
   list.innerHTML = renderElements;
-  
+
 
 }
 
 function handleClick(event) {
   const parentId = event.target.parentElement.id;
-    const filteredArray = filterArray();
+  const filteredArray = filterArray();
   if (event.target.className === 'delete') {
     tasksArray = tasksArray.filter(task => (task.id != parentId))
     renderTask()
@@ -90,7 +91,7 @@ function handleClick(event) {
 }
 
 const blurTask = (event) => {
-  if (event.target.value.trim() != "" && event.target.className === 'newText') {
+  if (event.target.className  !== 'check-box') {
     tasksArray.forEach(task => {
       if (task.id == event.target.parentElement.id) {
         task.taskText = replaced(event.target.value.replace(/ +/g, " "))
@@ -101,17 +102,13 @@ const blurTask = (event) => {
 }
 
 const editTask = (event) => {
- 
-  if (event.code === ENTER) {
+  if (event.code === ENTER && event.target.className !== 'check-box') {
     if (event.target.value.trim() != "") {
       const parentId = event.target.parentElement.id
       tasksArray.forEach(task => {
-         let inputText = task.taskText
+        let inputText = task.taskText
         if (task.id === Number(parentId)) {
           task.taskText = replaced(event.target.value.replace(/ +/g, " "))
-          if (event.target.className !== 'checkbox'){
-             task.taskText = inputText
-          }
         };
       });
     }
@@ -120,8 +117,8 @@ const editTask = (event) => {
   else if (event.code === ESC) {
     renderTask()
   }
-  else if (event.target.className ==='checkbox'){
-          task.taskText = event.target.value
+  else if (event.target.className === 'checkbox') {
+    task.taskText = event.target.value
   }
 }
 
@@ -181,10 +178,10 @@ const countPages = () => {
 
 const renderPage = () => {
   countPages()
-    let createPages = `<button class='counter${(currentPage<2) ? ' counter__active':''}' id = "1">1</button>`
+  let createPages = `<button class='counter${(currentPage < 2) ? ' counter__active' : ''}' id = "1">1</button>`
   for (let i = 2; i <= totalPages; i++) {
-    if(i<45){
-    createPages += `<button class='counter${(currentPage === i)  ? ' counter__active' : ''}' id ="${i}">${i}</button>`;
+    if (i < 45) {
+      createPages += `<button class='counter${(currentPage === i) ? ' counter__active' : ''}' id ="${i}">${i}</button>`;
     }
   }
   pages.innerHTML = createPages;
@@ -198,9 +195,9 @@ const changePage = (event) => {
   if (event.target.className === 'counter') {
     currentPage = Number(event.target.id);
     renderTask()
-     
+
   }
-  
+
 }
 const slicePage = () => {
   const filteredArray = filterArray()
