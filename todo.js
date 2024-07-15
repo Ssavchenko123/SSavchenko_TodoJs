@@ -7,8 +7,8 @@ const form = document.querySelector('#form');
 const inputMain = document.querySelector('#input');
 const buttonAdd = document.querySelector('#button');
 const list = document.querySelector('#todo-elements')
-const Bottom = document.querySelector('#bottom-buttons')
-const buttons = Bottom.querySelectorAll('.flex-element')
+const bottomMenu = document.querySelector('#bottom-buttons')
+const bottomButtons = bottomMenu.querySelectorAll('.flex-element')
 const newTask = document.querySelector('#newText')
 const pages = document.querySelector('.pages')
 const counters = pages.querySelectorAll('.counter')
@@ -18,13 +18,13 @@ let filterName = "All"
 let currentPage = 1;
 let totalPages = 1;
 
-function addTask(event) {
+function addTasks(event) {
   event.preventDefault();
   if (inputMain.value.trim() != "") {
     tasksArray.push(
       {
         id: Date.now(),
-        taskText: replaced(inputMain.value),
+        taskText: replaced(inputMain.value.replace(/ +/g, " ")),
         isCompleted: false,
       }
     )
@@ -32,7 +32,7 @@ function addTask(event) {
   countPages()
   renderPage()
   if (totalPages > currentPage) {
-    currentPage += 1
+    currentPage = Math.ceil(tasksArray.length / TASK_PER_PAGE)
   }
 
   inputMain.value = "";
@@ -50,7 +50,7 @@ const renderTask = () => {
       renderElements += `
     <li class="task-block" id="${task.id}">
       <input class="check-box" type="checkbox" ${task.isCompleted ? 'checked' : ''}>
-      <input hidden class = "newText" value = "${task.taskText}" >
+      <input hidden class = "newText "  minLength="1" maxLength="100" value = "${task.taskText}" >
       <pre class="task-name">${task.taskText}</pre>
       <button class="delete">X</button>
     </li>
@@ -93,7 +93,7 @@ const blurTask = (event) => {
   if (event.target.value.trim() != "" && event.target.className === 'newText') {
     tasksArray.forEach(task => {
       if (task.id == event.target.parentElement.id) {
-        task.taskText = replaced(event.target.value)
+        task.taskText = replaced(event.target.value.replace(/ +/g, " "))
       }
     })
   }
@@ -101,22 +101,23 @@ const blurTask = (event) => {
 }
 
 const editTask = (event) => {
+ 
   if (event.code === ENTER) {
     if (event.target.value.trim() != "") {
       const parentId = event.target.parentElement.id
       tasksArray.forEach(task => {
+         let inputText = task.taskText
         if (task.id === Number(parentId)) {
-          task.taskText = replaced(event.target.value)
+          task.taskText = replaced(event.target.value.replace(/ +/g, " "))
+          if (event.target.className !== 'checkbox'){
+             task.taskText = inputText
+          }
         };
-        
       });
     }
     renderTask()
   }
   else if (event.code === ESC) {
-    renderTask()
-  }
-  else if (event.code === TAB){
     renderTask()
   }
   else if (event.target.className ==='checkbox'){
@@ -137,16 +138,16 @@ const filter = (event) => {
     renderTask()
   }
   if (event.target.className == 'flex-element') {
-    buttons.forEach(task => task.classList.remove('active'));
+    bottomButtons.forEach(task => task.classList.remove('active'));
     event.target.classList.add("active")
     renderTask()
   }
 }
 const counterButtons = () => {
   const completedCount = tasksArray.filter(task => task.isCompleted).length;
-  Bottom.children[2].innerText = `Completed (${completedCount})`
-  Bottom.children[1].innerText = `Active (${tasksArray.length - completedCount})`
-  Bottom.children[0].innerText = `All (${tasksArray.length})`
+  bottomMenu.children[2].innerText = `Completed (${completedCount})`
+  bottomMenu.children[1].innerText = `Active (${tasksArray.length - completedCount})`
+  bottomMenu.children[0].innerText = `All (${tasksArray.length})`
 }
 const filterArray = () => {
   if (filterName === "All") {
@@ -227,9 +228,9 @@ const replaced = (string) => {
 
 pages.addEventListener("click", changePage)
 deleteAll.addEventListener("click", deleteCompleted);
-Bottom.addEventListener("click", filter);
+bottomMenu.addEventListener("click", filter);
 checkAllTask.addEventListener("click", allChecked);
 list.addEventListener("blur", blurTask, true);
 list.addEventListener("keydown", editTask);
 list.addEventListener('click', handleClick);
-buttonAdd.addEventListener("click", addTask)
+buttonAdd.addEventListener("click", addTasks)

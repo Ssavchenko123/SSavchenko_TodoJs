@@ -27,6 +27,7 @@ p {}
   width: 300px;
   height: 30px;
   font-family: Geneva;
+  white-space: pre;
 }
 
 .add-button {
@@ -112,10 +113,10 @@ p {}
   width: 90%;
   font-style: italic;
   font-size: large;
-  overflow: visible;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
+  overflow-wrap: break-word;
+  white-space: normal;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 .delete {
@@ -133,8 +134,8 @@ p {}
   font-style: italic;
   font-size: large;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 .flex-box{
 display: flex;
@@ -157,10 +158,6 @@ height: 50px;
 }
 .counter{
   background-color: white;
- /*display: flex;
-  justify-content: center;
-  margin-top: 30%;
-  margin-left: 50%;*/
 }
 .delete-button{
   display: flex;
@@ -189,4 +186,7 @@ height: 50px;
 }
 .counter__active{
   background-color: cadetblue;
+}
+.carry{
+  white-space: normal;
 }
