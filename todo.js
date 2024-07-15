@@ -13,7 +13,7 @@ const newTask = document.querySelector('#newText')
 const pages = document.querySelector('.pages')
 const counters = pages.querySelectorAll('.counter')
 //const deleteAll = document.querySelector('#delete-button')
-let taskArray = []
+let tasksArray = []
 let filterName = "All"
 let currentPage = 1;
 let totalPages = 1;
@@ -21,7 +21,7 @@ let totalPages = 1;
 function addTask(event) {
   event.preventDefault();
   if (inputMain.value.trim() != "") {
-    taskArray.push(
+    tasksArray.push(
       {
         id: Date.now(),
         taskText: replaced(inputMain.value),
@@ -29,20 +29,20 @@ function addTask(event) {
       }
     )
   }
-  renderPages()
+  countPages()
   renderPage()
   if (totalPages > currentPage) {
     currentPage += 1
   }
 
   inputMain.value = "";
-  render()
+  renderTask()
 }
 
-const render = () => {
-  counter()
+const renderTask = () => {
+  counterButtons()
   renderPage()
-  checkAllTask.checked = taskArray.every(task => task.isCompleted) && taskArray.length;
+  checkAllTask.checked = tasksArray.every(task => task.isCompleted) && tasksArray.length;
   const rend = slicePage()
   let renderElements = ""
   const createTask = () => {
@@ -67,15 +67,15 @@ function handleClick(event) {
   const parentId = event.target.parentElement.id;
     const filteredArray = filterArray();
   if (event.target.className === 'delete') {
-    taskArray = taskArray.filter(task => (task.id != parentId))
-    render()
+    tasksArray = tasksArray.filter(task => (task.id != parentId))
+    renderTask()
   }
 
   if (event.target.className === 'check-box') {
-    taskArray.forEach((task) => {
+    tasksArray.forEach((task) => {
       if (task.id == parentId) task.isCompleted = event.target.checked;
     });
-    render()
+    renderTask()
   }
 
   if (event.target.className === 'task-name') {
@@ -91,83 +91,87 @@ function handleClick(event) {
 
 const blurTask = (event) => {
   if (event.target.value.trim() != "" && event.target.className === 'newText') {
-    taskArray.forEach(task => {
+    tasksArray.forEach(task => {
       if (task.id == event.target.parentElement.id) {
         task.taskText = replaced(event.target.value)
       }
     })
   }
-  render()
+  renderTask()
 }
 
 const editTask = (event) => {
   if (event.code === ENTER) {
     if (event.target.value.trim() != "") {
       const parentId = event.target.parentElement.id
-      taskArray.forEach(task => {
+      tasksArray.forEach(task => {
         if (task.id === Number(parentId)) {
           task.taskText = replaced(event.target.value)
         };
+        
       });
     }
-    render()
+    renderTask()
   }
   else if (event.code === ESC) {
-    render()
+    renderTask()
   }
   else if (event.code === TAB){
-    render()
+    renderTask()
+  }
+  else if (event.target.className ==='checkbox'){
+          task.taskText = event.target.value
   }
 }
 
 const allChecked = (event) => {
-  taskArray.forEach(task => {
+  tasksArray.forEach(task => {
     task.isCompleted = event.target.checked;
   });
-  render()
+  renderTask()
 }
 
 const filter = (event) => {
   if (event.target.className === 'flex-element') {
     filterName = event.target.id
-    render()
+    renderTask()
   }
   if (event.target.className == 'flex-element') {
     buttons.forEach(task => task.classList.remove('active'));
     event.target.classList.add("active")
-    render()
+    renderTask()
   }
 }
-const counter = () => {
-  const completedCount = taskArray.filter(task => task.isCompleted).length;
+const counterButtons = () => {
+  const completedCount = tasksArray.filter(task => task.isCompleted).length;
   Bottom.children[2].innerText = `Completed (${completedCount})`
-  Bottom.children[1].innerText = `Active (${taskArray.length - completedCount})`
-  Bottom.children[0].innerText = `All (${taskArray.length})`
+  Bottom.children[1].innerText = `Active (${tasksArray.length - completedCount})`
+  Bottom.children[0].innerText = `All (${tasksArray.length})`
 }
 const filterArray = () => {
   if (filterName === "All") {
-    return taskArray
+    return tasksArray
   }
   else if (filterName === "Active") {
-    return taskArray.filter(task => !task.isCompleted)
+    return tasksArray.filter(task => !task.isCompleted)
   }
   else if (filterName === "Completed") {
-    return taskArray.filter(task => task.isCompleted)
+    return tasksArray.filter(task => task.isCompleted)
   }
 }
 
 const deleteCompleted = () => {
-  taskArray = taskArray.filter(task => !task.isCompleted)
-  renderPages()
-  render()
+  tasksArray = tasksArray.filter(task => !task.isCompleted)
+  countPages()
+  renderTask()
 }
 
-const renderPages = () => {
+const countPages = () => {
   const filteredArr = filterArray();
   totalPages = Math.ceil(filteredArr.length / TASK_PER_PAGE)
   if (currentPage > totalPages) {
     currentPage = totalPages
-    render()
+    renderTask()
   }
   if (currentPage < 1) {
     currentPage = 1;
@@ -175,7 +179,7 @@ const renderPages = () => {
 }
 
 const renderPage = () => {
-  renderPages()
+  countPages()
     let createPages = `<button class='counter${(currentPage<2) ? ' counter__active':''}' id = "1">1</button>`
   for (let i = 2; i <= totalPages; i++) {
     if(i<45){
@@ -192,7 +196,7 @@ const replace = () => {
 const changePage = (event) => {
   if (event.target.className === 'counter') {
     currentPage = Number(event.target.id);
-    render()
+    renderTask()
      
   }
   
