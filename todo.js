@@ -3,22 +3,23 @@ const ENTER = 'Enter';
 const ESC = 'Escape';
 const TASK_PER_PAGE = 5;
 const checkAllTask = document.querySelector('#check-box-up');
-const form = document.querySelector('#form');
-const inputMain = document.querySelector('#input');
-const buttonAdd = document.querySelector('#button');
+const form = document.querySelector('#header');
+const inputMain = document.querySelector('#inputMain');
+const buttonAdd = document.querySelector('#buttonAdd');
 const list = document.querySelector('#todo-elements')
 const bottomMenu = document.querySelector('#bottom-buttons')
 const bottomButtons = bottomMenu.querySelectorAll('.flex-element')
-const newTask = document.querySelector('#newText')
 const pages = document.querySelector('.pages')
 const counters = pages.querySelectorAll('.counter')
 let tasksArray = []
 let filterName = "All"
 let currentPage = 1;
 let totalPages = 1;
+const dbClick = 2;
 
-function addTasks(event) {
+const addTasks = (event) =>{
   event.preventDefault();
+  let taskTextValue =replaced(inputMain.value.replace(/ +/g, " "));
   if (inputMain.value.trim() != "") {
     filterName = "All"
     bottomButtons.forEach(task => task.classList.remove('active'));
@@ -26,7 +27,7 @@ function addTasks(event) {
     tasksArray.push(
       {
         id: Date.now(),
-        taskText: replaced(inputMain.value.replace(/ +/g, " ")),
+        taskText: taskTextValue,
         isCompleted: false,
       }
     )
@@ -43,10 +44,9 @@ function addTasks(event) {
 const renderTask = () => {
   counterButtons()
   renderPage()
-  checkAllTask.checked = tasksArray.every(task => task.isCompleted) && tasksArray.length;
+  checkAllTask.checked = tasksArray.every(task => task.isCompleted) 
   const rend = slicePage()
   let renderElements = ""
-  const createTask = () => {
     rend.forEach((task) => {
       renderElements += `
     <li class="task-block" id="${task.id}">
@@ -57,16 +57,11 @@ const renderTask = () => {
     </li>
     `
     });
-  }
-  createTask()
   list.innerHTML = renderElements;
-
-
 }
 
 function handleClick(event) {
   const parentId = event.target.parentElement.id;
-  const filteredArray = filterArray();
   if (event.target.className === 'delete') {
     tasksArray = tasksArray.filter(task => (task.id != parentId))
     renderTask()
@@ -80,7 +75,7 @@ function handleClick(event) {
   }
 
   if (event.target.className === 'task-name') {
-    if (event.detail == 2) {
+    if (event.detail == dbClick) {
       event.target.hidden = true;
       event.target.previousElementSibling.hidden = false;
       event.target.previousElementSibling.focus();
@@ -103,7 +98,6 @@ const blurTask = (event) => {
 
 const editTask = (event) => {
   if (event.code === ENTER && event.target.className !== 'check-box') {
-    if (event.target.value.trim() != "") {
       const parentId = event.target.parentElement.id
       tasksArray.forEach(task => {
         let inputText = task.taskText
@@ -111,14 +105,10 @@ const editTask = (event) => {
           task.taskText = replaced(event.target.value.replace(/ +/g, " "))
         };
       });
-    }
     renderTask()
   }
   else if (event.code === ESC) {
     renderTask()
-  }
-  else if (event.target.className === 'checkbox') {
-    task.taskText = event.target.value
   }
 }
 
@@ -187,10 +177,6 @@ const renderPage = () => {
   pages.innerHTML = createPages;
 }
 
-const replace = () => {
-  return taskText.replace()
-}
-
 const changePage = (event) => {
   if (event.target.className === 'counter') {
     currentPage = Number(event.target.id);
@@ -199,6 +185,7 @@ const changePage = (event) => {
   }
 
 }
+
 const slicePage = () => {
   const filteredArray = filterArray()
   const firstElement = (currentPage - 1) * TASK_PER_PAGE;
@@ -206,6 +193,7 @@ const slicePage = () => {
   const pagination = filteredArray.slice(firstElement, elementOnEnd)
   return pagination;
 }
+
 const replaced = (string) => {
   return string
     .replace(/&/g, "&amp;")
@@ -215,13 +203,6 @@ const replaced = (string) => {
     .replace(/'/g, "&#039;")
 }
 
-// const filteredArray = filterArray();
-//     const currentPageMin = (currentPage-1) * TASK_PER_PAGE
-//     console.log(currentPageMin);
-//     console.log(filteredArray.length)
-//     if (currentPageMin>=filteredArray.length) {
-//       currentPage--;
-//     }
 
 pages.addEventListener("click", changePage)
 deleteAll.addEventListener("click", deleteCompleted);
